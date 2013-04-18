@@ -50,25 +50,15 @@ if g:smartclose_set_default_mapping
 endif
 
 fun! s:quit_buffer(bufnr)
-    for i in range(1, winnr('$'))
-        if winbufnr(i) == a:bufnr
-            if winnr() == i
-                silent! exe 'q'
-            else
-                let current_buffer = bufnr('%')
-                silent! exe i . 'wincmd w'
-                silent! exe 'q'
-
-                for j in range(1, winnr('$'))
-                    if winbufnr(j) == current_buffer
-                        silent! exe j . 'wincmd w'
-                        return
-                    endif
-                endfor
-            endif
-            return
-        endif
-    endfor
+    let winnr = bufwinnr(a:bufnr)
+    if winnr() == winnr
+        silent! exe 'q'
+    else
+        let current_buffer = bufnr('%')
+        silent! exe winnr . 'wincmd w'
+        silent! exe 'q'
+        silent! exe bufwinnr(current_buffer) . 'wincmd w'
+    end
 endfun
 
 fun! s:smart_close(bang)
