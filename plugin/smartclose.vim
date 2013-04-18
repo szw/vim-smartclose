@@ -54,9 +54,31 @@ if g:smartclose_set_default_mapping
     silent! exe 'inoremap <silent>' . g:smartclose_default_mapping_key . ' <C-[>' . command . '<CR>'
 endif
 
+fun! s:quit_buffer(bufnr)
+    for i in range(1, winnr('$'))
+        if winbufnr(i) == a:bufnr
+            if winnr() == i
+                silent! exe 'q'
+            else
+                let current_buffer = bufnr('%')
+                silent! exe i . 'wincmd w'
+                silent! exe 'q'
+
+                for j in range(1, winnr('$'))
+                    if winbufnr(j) == current_buffer
+                        silent exe j . 'wincmd w'
+                        return
+                    endif
+                endfor
+            endif
+            return
+        endif
+    endfor
+endfun
+
 fun! s:smart_close(bang)
     if !empty(&buftype)
-        bwipeout
+        call s:quit_buffer(bufnr('%'))
         return
     endif
 
@@ -85,8 +107,8 @@ fun! s:smart_close(bang)
     endfor
 
     if empty(buffers_to_close) || a:bang
-        silent! exe ':q'
+        call s:quit_buffer(bufnr('%'))
     else
-        silent! exe ':bwipeout ' . max(buffers_to_close)
+        call s:quit_buffer(max(buffers_to_close))
     endif
 endfun
