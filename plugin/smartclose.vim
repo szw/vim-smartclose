@@ -66,7 +66,7 @@ fun! s:quit_buffer(bufnr)
 
                 for j in range(1, winnr('$'))
                     if winbufnr(j) == current_buffer
-                        silent exe j . 'wincmd w'
+                        silent! exe j . 'wincmd w'
                         return
                     endif
                 endfor
