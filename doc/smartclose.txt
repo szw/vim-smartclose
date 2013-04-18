@@ -1,0 +1,112 @@
+*smartclose.txt*           For Vim version 7.3          Last change: 2013-04-18
+*SmartClose*
+
+
+
+
+
+
+                        Vim-SmartClose version 0.0.1~
+
+                      Close Vim windows in a smart way!
+
+
+
+
+
+
+Copyright (c) 2013 Szymon Wrozynski
+
+============================================================================
+Table of Contents
+
+    1. About................................................|smartclose-about|
+    2. Usage................................................|smartclose-usage|
+    3. Configuration................................|smartclose-configuration|
+    4. Author and License..........................|smartclose-author-license|
+
+----------------------------------------------------------------------------
+1. About                                                    *smartclose-about*
+
+SmartClose is a wise closing utility. Basically, it closes windows from the
+current tab with a single keystroke (<F10> by default). And if you choose the
+banged version it just closes the current window. But some real nice things
+happen if you let the plugin to decide which window should be closed.
+
+The plugin can estimate that, regarding your current active window, its buffer
+type, and the whole list of visible buffers. It prefers to close not listed
+ones first (but including quickfix windows). Then it closes the current normal
+window. If it is the last window in the tab, it closes the tab. If it is the
+last tab, it closes Vim.
+
+----------------------------------------------------------------------------
+2. Usage                                                    *smartclose-usage*
+
+SmartClose has only one command: >
+
+    :SmartClose
+<
+
+Also the plugin can define some default mappings if the user wants to.
+By default it maps to <F10> in normal, insert, and visual modes.
+See |smartclose-configuration| to get some examples.
+
+The banged version force to close the current window: >
+
+    :SmartClose!
+
+<
+
+----------------------------------------------------------------------------
+3. Configuration                                    *smartclose-configuration*
+
+SmartClose is extremely handy with command mappings. By default it uses <F10>
+like here: >
+
+    nnoremap <silent><F10> :SmartClose<CR>
+    vnoremap <silent><F10> :SmartClose<CR>
+    inoremap <silent><F10> <C-[>:SmartClose<CR>
+
+<
+
+With these mappings you can hit <F10> any time, not only in normal mode.
+
+Here are some plugin options:
+
+
+                                             *'smartclose_set_default_mapping'*
+Default: 1
+
+Whether SmartClose should set default mappings or not: >
+
+    let g:smartclose_set_default_mapping = 1
+
+<
+
+                                           *'smartclose_set_mapping_with_bang'*
+Default: 0
+
+Whether SmartClose should set default mappings with banged version or not: >
+
+    let g:smartclose_set_mapping_with_bang = 0
+
+<
+
+                                             *'smartclose_default_mapping_key'*
+Default: '<F10>'
+
+The default mappings key: >
+
+    let g:smartclose_default_mapping_key = '<F10>'
+
+<
+
+----------------------------------------------------------------------------
+4. Author and License                              *smartclose-author-license*
+
+Smartclose was written by Szymon Wrozynski and Contributors
+(https://github.com/szw/vim-smartclose/commits/master). It is licensed
+under the same terms as Vim itself. For more info see |license|.
+
+vim:tw=78:ts=8:ft=help:norl:
+
