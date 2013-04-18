@@ -37,11 +37,6 @@ endif
 
 command! -bang -nargs=0 -range SmartClose :call s:smart_close(<bang>0)
 
-augroup SmartClose
-    au!
-    au BufWinEnter quickfix if !exists('t:smartclose_qbuffers') | let t:smartclose_qbuffers = [bufnr('%')] | else | call add(t:smartclose_qbuffers, bufnr('%')) | endif
-augroup END
-
 if g:smartclose_set_default_mapping
     let command = ':SmartClose'
 
@@ -66,7 +61,7 @@ fun! s:quit_buffer(bufnr)
 
                 for j in range(1, winnr('$'))
                     if winbufnr(j) == current_buffer
-                        silent! exe j . 'wincmd w'
+                        silent exe j . 'wincmd w'
                         return
                     endif
                 endfor
@@ -82,33 +77,17 @@ fun! s:smart_close(bang)
         return
     endif
 
-    let buffers_to_close = []
-
-    if exists('t:smartclose_qbuffers')
-        let old_qbuffers_indexes = []
-
-        for i in range(0, len(t:smartclose_qbuffers) - 1)
-            if buflisted(t:smartclose_qbuffers[i])
-                call add(buffers_to_close, t:smartclose_qbuffers[i])
-            else
-                call add(old_qbuffers_indexes, i)
-            endif
-        endfor
-
-        for oi in old_qbuffers_indexes
-            unlet t:smartclose_qbuffers[oi]
-        endfor
-    endif
+    let candidates = []
 
     for b in tabpagebuflist()
-        if !buflisted(b)
-            call add(buffers_to_close, b)
+        if !getbufvar(b, '&modifiable') || !getbufvar(b, '&buflisted') || (getbufvar(b, '&buftype') != '')
+            call add(candidates, b)
         endif
     endfor
 
-    if empty(buffers_to_close) || a:bang
+    if empty(candidates) || a:bang
         call s:quit_buffer(bufnr('%'))
     else
-        call s:quit_buffer(max(buffers_to_close))
+        call s:quit_buffer(max(candidates))
     endif
 endfun
