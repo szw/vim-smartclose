@@ -39,7 +39,7 @@ command! -bang -nargs=0 -range SmartClose :call s:smart_close(<bang>0)
 
 augroup SmartClose
     au!
-    au BufWinEnter quickfix let s:quickfix_buffer = bufnr('$')
+    au BufWinEnter quickfix if !exists('t:smartclose_qbuffers') | let t:smartclose_qbuffers = [bufnr('%')] | else | call add(t:smartclose_qbuffers, bufnr('%')) | endif
 augroup END
 
 if g:smartclose_set_default_mapping
@@ -62,12 +62,20 @@ fun! s:smart_close(bang)
 
     let buffers_to_close = []
 
-    if exists('s:quickfix_buffer')
-        if buflisted(s:quickfix_buffer)
-            call add(buffers_to_close, s:quickfix_buffer)
-        else
-            unlet! s:quickfix_buffer
-        endif
+    if exists('t:smartclose_qbuffers')
+        let old_qbuffers_indexes = []
+
+        for i in range(0, len(t:smartclose_qbuffers) - 1)
+            if buflisted(t:smartclose_qbuffers[i])
+                call add(buffers_to_close, t:smartclose_qbuffers[i])
+            else
+                call add(old_qbuffers_indexes, i)
+            endif
+        endfor
+
+        for oi in old_qbuffers_indexes
+            unlet t:smartclose_qbuffers[oi]
+        endfor
     endif
 
     for b in tabpagebuflist()
