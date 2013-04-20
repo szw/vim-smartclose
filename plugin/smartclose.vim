@@ -1,6 +1,6 @@
 " vim-smartclose - Close Vim windows in a smart way!
 " Maintainer:   Szymon Wrozynski
-" Version:      0.0.1
+" Version:      0.0.2
 "
 " Installation:
 " Place in ~/.vim/plugin/smartclose.vim or in case of Pathogen:
@@ -35,6 +35,12 @@ if !exists('g:smartclose_default_mapping_key')
     let g:smartclose_default_mapping_key = '<F10>'
 endif
 
+if !exists('g:smartclose_delay')
+    let g:smartclose_delay = 1000
+endif
+
+let s:default_updatetime = &updatetime
+
 command! -bang -nargs=0 -range SmartClose :call s:smart_close(<bang>0)
 
 if g:smartclose_set_default_mapping
@@ -49,26 +55,40 @@ if g:smartclose_set_default_mapping
     silent! exe 'inoremap <silent>' . g:smartclose_default_mapping_key . ' <C-[>' . command . '<CR>'
 endif
 
-fun! s:is_candidate(buffer)
+if g:smartclose_delay
+    augroup SmartCloseDelay
+        au!
+        au WinEnter * let s:delayed_closing = 1 | exe 'setl ut=' . g:smartclose_delay | call s:grab_cursor_hold_once()
+    augroup END
+endif
+
+fun! s:grab_cursor_hold_once()
+    augroup SmartCloseCursorHold
+        au!
+        au CursorHold * exe 'setl ut=' . s:default_updatetime | unlet! s:delayed_closing | au! SmartCloseCursorHold CursorHold
+    augroup END
+endfun
+
+fun! s:is_auxiliary(buffer)
     return !getbufvar(a:buffer, '&modifiable') || !getbufvar(a:buffer, '&buflisted') || (getbufvar(a:buffer, '&buftype') != '')
 endfun
 
 fun! s:smart_close(bang)
     let current_buffer = bufnr('%')
 
-    if s:is_candidate(current_buffer) || a:bang
+    if s:is_auxiliary(current_buffer) || exists('s:delayed_closing') || a:bang
         silent! exe 'q'
     else
-        let candidate = 0
+        let auxiliary_buffer = 0
 
         for b in tabpagebuflist()
-            if s:is_candidate(b) && (b > candidate)
-                let candidate = b
+            if s:is_auxiliary(b) && (b > auxiliary_buffer)
+                let auxiliary_buffer = b
             endif
         endfor
 
-        if candidate
-            silent! exe bufwinnr(candidate) . 'wincmd w'
+        if auxiliary_buffer
+            silent! exe bufwinnr(auxiliary_buffer) . 'wincmd w'
             silent! exe 'q'
             silent! exe bufwinnr(current_buffer) . 'wincmd w'
         else

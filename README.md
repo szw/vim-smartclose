@@ -19,16 +19,20 @@ how many users it has and then how to proceed with further development :).
 About
 -----
 
-SmartClose is a wise closing utility. Basically, it closes windows from the current tab with
-a single keystroke (`<F10>` by default). And if you choose the banged version it just closes the
-current window. But some real nice things happen if you let the plugin to decide which window should
-be closed.
+SmartClose is a wise closing utility. What does it mean? SmartClose plugin distinguishes two kinds
+of windows (the main windows you use to work) and the auxiliary windows (a preview window,
+a NERDTree panel, a quickfix window, etc). Basically, the plugin provides you the closing ability
+just with single keystroke (`<F10>`). But if there are any auxiliary windows visible, it closes them
+first (in the LIFO order). It means, you don't have to leave the current (regualar) window to close an
+auxiliary one. Just hit `<F10>` and you'll get it closed. If there are no auxiliary windows visible,
+`<F10>` will close the current window (and a tab if it would be the last window in the tab, or the editor
+itself, if it would be the last tab).
 
-The plugin can estimate that, regarding your current active window, its buffer type, and the whole
-list of visible buffers. It prefers to close not listed ones first (but including quickfix windows).
-Then it closes the current normal window. If it is the last window in the tab, it closes the tab. If
-it is the last tab, it closes Vim.
-
+If you hit `<F10>` in the auxiliary windows it gets closed immediately. Also, by default, you can
+close the regular window in the same way, but only within the first second after entering the window.
+In other words, the smart auxiliary windows closing feature is delayed about 1 sec. This way you
+can move into a regular window you want to close, hit immediately `<F10>`, and close it even if
+there are open auxilary windows on the screen. The delay can be adjusted or even disabled.
 
 Usage
 -----
@@ -37,11 +41,11 @@ SmartClose has only one command:
 
     :SmartClose
 
-Also the plugin can define some default mappings if the user wants to.  By default it maps to
-`<F10>` in normal, insert, and visual modes.  See [Configuration](#configuration) to get some
+Also the plugin can define some default mappings if the user wants to. By default it maps to
+`<F10>` in normal, insert, and visual modes. See [Configuration](#configuration) to get some
 examples.
 
-The banged version force to close the current window:
+The banged version forces closing of the current window:
 
     :SmartClose!
 
@@ -79,6 +83,15 @@ Here are some plugin options:
     The default mappings key:
 
         let g:smartclose_default_mapping_key = '<F10>'
+
+
+* `smartclose_delay`
+
+    Sets the delay of smart closing auxiliary windows. After entering a new window `<F10>` will
+    start closing auxiliary windows first after that period. By default is's 1000ms (1 second).
+    You can turn off delaying completely by setting this variable to 0.
+
+        let g:smartclose_delay = 1000
 
 
 Author and License
