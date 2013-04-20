@@ -6,7 +6,7 @@
 
 
 
-                        Vim-SmartClose version 0.0.1~
+                        Vim-SmartClose version 0.0.2~
 
                       Close Vim windows in a smart way!
 
