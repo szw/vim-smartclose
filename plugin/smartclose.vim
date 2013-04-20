@@ -49,35 +49,30 @@ if g:smartclose_set_default_mapping
     silent! exe 'inoremap <silent>' . g:smartclose_default_mapping_key . ' <C-[>' . command . '<CR>'
 endif
 
-fun! s:quit_buffer(bufnr)
-    let winnr = bufwinnr(a:bufnr)
-    if winnr() == winnr
-        silent! exe 'q'
-    else
-        let current_buffer = bufnr('%')
-        silent! exe winnr . 'wincmd w'
-        silent! exe 'q'
-        silent! exe bufwinnr(current_buffer) . 'wincmd w'
-    end
+fun! s:is_candidate(buffer)
+    return !getbufvar(a:buffer, '&modifiable') || !getbufvar(a:buffer, '&buflisted') || (getbufvar(a:buffer, '&buftype') != '')
 endfun
 
 fun! s:smart_close(bang)
-    if !empty(&buftype)
-        call s:quit_buffer(bufnr('%'))
-        return
-    endif
+    let current_buffer = bufnr('%')
 
-    let candidates = []
-
-    for b in tabpagebuflist()
-        if !getbufvar(b, '&modifiable') || !getbufvar(b, '&buflisted') || (getbufvar(b, '&buftype') != '')
-            call add(candidates, b)
-        endif
-    endfor
-
-    if empty(candidates) || a:bang
-        call s:quit_buffer(bufnr('%'))
+    if s:is_candidate(current_buffer) || a:bang
+        silent! exe 'q'
     else
-        call s:quit_buffer(max(candidates))
+        let candidate = 0
+
+        for b in tabpagebuflist()
+            if s:is_candidate(b) && (b > candidate)
+                let candidate = b
+            endif
+        endfor
+
+        if candidate
+            silent! exe bufwinnr(candidate) . 'wincmd w'
+            silent! exe 'q'
+            silent! exe bufwinnr(current_buffer) . 'wincmd w'
+        else
+            silent! exe 'q'
+        endif
     endif
 endfun
