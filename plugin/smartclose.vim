@@ -39,9 +39,10 @@ if !exists('g:smartclose_delay')
     let g:smartclose_delay = 1000
 endif
 
-let s:default_updatetime = &updatetime
-
 command! -bang -nargs=0 -range SmartClose :call s:smart_close(<bang>0)
+
+let s:default_updatetime = &updatetime
+let s:delayed_closing = 0
 
 if g:smartclose_set_default_mapping
     let command = ':SmartClose'
@@ -65,7 +66,7 @@ endif
 fun! s:grab_cursor_hold_once()
     augroup SmartCloseCursorHold
         au!
-        au CursorHold * exe 'setl ut=' . s:default_updatetime | unlet! s:delayed_closing | au! SmartCloseCursorHold CursorHold
+        au CursorHold * let s:delayed_closing = 0 | exe 'setl ut=' . s:default_updatetime | au! SmartCloseCursorHold CursorHold
     augroup END
 endfun
 
@@ -76,7 +77,7 @@ endfun
 fun! s:smart_close(bang)
     let current_buffer = bufnr('%')
 
-    if s:is_auxiliary(current_buffer) || exists('s:delayed_closing') || a:bang
+    if s:is_auxiliary(current_buffer) || s:delayed_closing || a:bang
         silent! exe 'noautocmd q'
     else
         let auxiliary_buffer = 0
