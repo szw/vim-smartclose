@@ -77,7 +77,7 @@ fun! s:smart_close(bang)
     let current_buffer = bufnr('%')
 
     if s:is_auxiliary(current_buffer) || exists('s:delayed_closing') || a:bang
-        silent! exe 'q'
+        silent! exe 'noautocmd q'
     else
         let auxiliary_buffer = 0
 
@@ -88,11 +88,11 @@ fun! s:smart_close(bang)
         endfor
 
         if auxiliary_buffer
-            silent! exe bufwinnr(auxiliary_buffer) . 'wincmd w'
-            silent! exe 'q'
-            silent! exe bufwinnr(current_buffer) . 'wincmd w'
+            silent! exe 'noautocmd ' . bufwinnr(auxiliary_buffer) . 'wincmd w'
+            silent! exe 'noautocmd q'
+            silent! exe 'noautocmd ' . bufwinnr(current_buffer) . 'wincmd w'
         else
-            silent! exe 'q'
+            silent! exe 'noautocmd q'
         endif
     endif
 endfun
