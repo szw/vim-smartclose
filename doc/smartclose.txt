@@ -29,23 +29,27 @@ Table of Contents
 1. About                                                    *smartclose-about*
 
 SmartClose is a wise closing utility. What does it mean? SmartClose plugin
-distinguishes two kinds of windows (the main windows you use to work) and the
-auxiliary windows (a preview window, a NERDTree panel, a quickfix window, etc).
-Basically, the plugin provides you the closing ability just with single
+distinguishes two kinds of windows (the regular windows you use to work) and
+the auxiliary ones (a preview window, a NERDTree panel, a quickfix window,
+etc). Basically, the plugin allows you to close a window just with a single
 keystroke (<F10>). But if there are any auxiliary windows visible, it closes
 them first (in the LIFO order). It means, you don't have to leave the current
-(regualar) window to close an auxiliary one. Just hit <F10> and you'll get it
-closed. If there are no auxiliary windows visible, <F10> will close the current
-window (and a tab if it would be the last window in the tab, or the editor
-itself, if it would be the last tab).
+(regular) window to close the auxiliary one. Just hit <F10> and you'll get
+it closed. If there are no auxiliary windows visible, <F10> will close the
+current window (and a tab if it would be the last window in the tab, or the
+editor itself, if it would be the last tab).
 
-If you hit <F10> in the auxiliary windows it gets closed immediately. Also, by
-default, you can close the regular window in the same way, but only within the
-first second after entering the window. In other words, the smart auxiliary
-windows closing feature is delayed about 1 sec. This way you can move into a
-regular window you want to close, hit immediately <F10>, and close it even if
-there are open auxilary windows on the screen. The delay can be adjusted or
-even disabled.
+If you hit <F10> inside an auxiliary window, the window is closed immediately.
+And sometimes, the same behavior could be desired inside regular windows too,
+right? Even, if there are visible auxiliary ones, which will have the
+precedence, as said before. Therefore, the plugin provides you a configurable
+delay time. By default, during the first second after entering a regular
+window, hitting <F10> will close that window rather than any auxiliary ones.
+
+In other words, the smart auxiliary windows closing feature is delayed about
+1 sec. This way you can move into a regular window you want to close, press
+<F10> immediately, and close it even if there are open auxilary windows on the
+screen. The delay can be adjusted or even disabled.
 
 ----------------------------------------------------------------------------
 2. Usage                                                    *smartclose-usage*
@@ -113,9 +117,9 @@ The default mappings key: >
 Default: 1000
 
 Sets the delay of smart closing auxiliary windows. After entering a new window
-<F10> will start closing auxiliary windows first after that period. By
-default is's 1000ms (1 second). You can turn off delaying completely by
-setting this variable to 0. >
+<F10> will start closing auxiliary windows rather than that window only after
+this period. By default it's 1000ms (1 second). You can turn off delaying
+completely by setting this variable to 0. >
 
     let g:smartclose_delay = 1000
 
