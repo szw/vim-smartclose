@@ -1,4 +1,4 @@
-*smartclose.txt*           For Vim version 7.3          Last change: 2013-04-21
+*smartclose.txt*           For Vim version 7.3          Last change: 2014-06-06
 *SmartClose*
 
 
@@ -6,7 +6,7 @@
 
 
 
-                        Vim-SmartClose version 0.0.2~
+                        Vim-SmartClose version 0.0.3~
 
                       Close Vim windows in a smart way!
 
@@ -15,7 +15,7 @@
 
 
 
-Copyright (c) 2013 Szymon Wrozynski
+Copyright (c) 2013-2014 Szymon Wrozynski and Contributors
 
 ============================================================================
 Table of Contents
@@ -114,14 +114,13 @@ The default mappings key: >
 <
 
                                                            *'smartclose_delay'*
-Default: 1000
+Default: 0
 
-Sets the delay of smart closing auxiliary windows. After entering a new window
-<F10> will start closing auxiliary windows rather than that window only after
-this period. By default it's 1000ms (1 second). You can turn off delaying
-completely by setting this variable to 0. >
+Sets the delay of smart closing auxiliary windows (in miliseconds). After
+entering a new window <F10> will start closing auxiliary windows rather than
+that window only after this period. By default it's set to 0 (turned off). >
 
-    let g:smartclose_delay = 1000
+    let g:smartclose_delay = 0
 
 <
 

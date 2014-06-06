@@ -91,11 +91,11 @@ Here are some plugin options:
 
 * `smartclose_delay`
 
-    Sets the delay of smart closing auxiliary windows. After entering a new window `<F10>` will
-    start closing auxiliary windows rather than that window only after this period. By default it's
-    1000ms (1 second). You can turn off delaying completely by setting this variable to `0`.
+    Sets the delay of smart closing auxiliary windows (in miliseconds). After entering a new window 
+    `<F10>` will start closing auxiliary windows rather than that window only after this period. 
+    By default it's set to 0 (turned off).
 
-        let g:smartclose_delay = 1000
+        let g:smartclose_delay = 0
 
 
 Author and License
@@ -105,4 +105,4 @@ SmartClose was written by Szymon Wrozynski and
 [Contributors](https://github.com/szw/vim-smartclose/commits/master). It is licensed under the same
 terms as Vim itself.
 
-Copyright &copy; 2013 Szymon Wrozynski. See `:help license`
+Copyright &copy; 2013-2014 Szymon Wrozynski and Contributors. See `:help license`

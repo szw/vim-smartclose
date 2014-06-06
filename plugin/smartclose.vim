@@ -1,6 +1,6 @@
 " vim-smartclose - Close Vim windows in a smart way!
 " Maintainer:   Szymon Wrozynski
-" Version:      0.0.2
+" Version:      0.0.3
 "
 " Installation:
 " Place in ~/.vim/plugin/smartclose.vim or in case of Pathogen:
@@ -9,7 +9,7 @@
 "     git clone https://github.com/szw/vim-smartclose.git
 "
 " License:
-" Copyright (c) 2013 Szymon Wrozynski and Contributors.
+" Copyright (c) 2013-2014 Szymon Wrozynski and Contributors.
 " Distributed under the same terms as Vim itself.
 " See :help license
 "
@@ -36,7 +36,7 @@ if !exists('g:smartclose_default_mapping_key')
 endif
 
 if !exists('g:smartclose_delay')
-    let g:smartclose_delay = 1000
+    let g:smartclose_delay = 0
 endif
 
 command! -bang -nargs=0 -range SmartClose :call s:smart_close(<bang>0)
