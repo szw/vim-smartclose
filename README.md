@@ -36,7 +36,7 @@ hitting `<F10>` will close that window rather than any auxiliary ones.
 
 In other words, the smart auxiliary windows closing feature is delayed about 1 sec. This way you
 can move into a regular window you want to close, press `<F10>` immediately, and close it even if
-there are open auxilary windows on the screen. The delay can be adjusted or even disabled.
+there are open auxiliary windows on the screen. The delay can be adjusted or even disabled.
 
 Usage
 -----
